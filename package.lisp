@@ -1,3 +1,3 @@
 (defpackage #:breac
   (:use #:common-lisp)
-  (:export #:breac))
+  (:export #:breac #:breac-if #:break-if))
