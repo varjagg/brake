@@ -14,7 +14,7 @@
   )
 
 (defmacro break-if (&rest args)
-  `(breac-if ,@args))
+  `(brake-if ,@args))
 
 (defun brake-disable (tag)
   )
