@@ -1,6 +1,6 @@
 (in-package #:breac)
 
-(defparameter *breac-points* '())
+(defparameter *breac-points* (make-hash-table))
 
 (defmacro breac (&optional tag step &body body)
   (let ((result (gensym "BREAC")))
@@ -15,3 +15,9 @@
 
 (defmacro break-if (&rest args)
   `(breac-if ,@args))
+
+(defun breac-disable (tag)
+  )
+
+(defun breac-enable (tag)
+  )
