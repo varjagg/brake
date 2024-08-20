@@ -3,7 +3,7 @@
 (defparameter *brake-points* (make-hash-table))
 
 (defmacro brake (&optional tag step &body body)
-  (let ((result (gensym "BREAC")))
+  (let ((result (gensym "BRK")))
     `(let ((,result (progn ,@body)))
        ,(if tag
 	    (error "Not implemented")
