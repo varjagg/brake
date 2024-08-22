@@ -1,3 +1,4 @@
 (defpackage #:brake
   (:use #:common-lisp)
-  (:export #:brake #:brake-if #:break-if #:brake-disable #:brake-enable))
+  (:export #:brake #:brake-when #:break-when #:brake-disable #:brake-enable
+	   #:reset-brake-points))
