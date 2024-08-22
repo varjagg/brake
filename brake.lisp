@@ -4,6 +4,8 @@
   ((state :initform 0
 	  :accessor state
 	  :type integer)
+   (enabled-p :initform t
+	      :accessor enabled-p)
    (brake-points :accessor brake-points
 		 :initform '())))
 
@@ -36,17 +38,18 @@
 		  `(let ((,record (gethash ,tag-or-sexp ,*brake-records*)))
 		     (unless ,record
 		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
-		     (let* ((,tail (member (state ,record) (brake-points ,record)))
-			    (,subtail (member ,step ,tail)))
-		       ;; right after current
-		       (unwind-protect
-			    (when (eql (cdr ,tail) ,subtail)
-			      (break)
-			      (setf (state ,record) ,step))
-			 ;; reset state if user aborts from BREAK or after last break
-			 (unless (and (eql (state ,record) ,step)
-				      (print (cdr ,subtail)))
-			   (setf (state ,record) 0))))))
+		     (when (enabled-p ,record)
+		       (let* ((,tail (member (state ,record) (brake-points ,record)))
+			      (,subtail (member ,step ,tail)))
+			 ;; right after current
+			 (unwind-protect
+			      (when (eql (cdr ,tail) ,subtail)
+				(break)
+				(setf (state ,record) ,step))
+			   ;; reset state if user aborts from BREAK or after last break
+			   (unless (and (eql (state ,record) ,step)
+					(print (cdr ,subtail)))
+			     (setf (state ,record) 0)))))))
 		'(break))
 	    '(break))
        ,result)))
@@ -58,10 +61,16 @@
   `(brake-when ,@args))
 
 (defun brake-disable (tag)
-  )
+  (let ((record (gethash tag *brake-records*)))
+    (if record
+	(setf (enabled-p record) nil)
+	(warn "No record of breakpoints with tag ~a" tag))))
 
 (defun brake-enable (tag)
-  )
+  (let ((record (gethash tag *brake-records*)))
+    (if record
+	(setf (enabled-p record) t)
+	(warn "No record of breakpoints with tag ~a" tag))))
 
 (defun reset-brake-points ()
   (clrhash *brake-records*))
