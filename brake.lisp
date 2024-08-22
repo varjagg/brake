@@ -24,7 +24,8 @@
 (defmacro brake (&optional tag-or-sexp step sexp)
   (let ((result (gensym "BRK-RES"))
 	(record (gensym "BRK"))
-	(tail (gensym "BRK")))
+	(tail (gensym "BRK"))
+	(subtail (gensym "BRK")))
     (when (and tag-or-sexp (listp tag-or-sexp))
       (setf sexp tag-or-sexp))
     `(let ((,result (progn ,sexp)))
@@ -33,16 +34,18 @@
 		(progn
 		  (add-brake-record tag-or-sexp step)
 		  `(let ((,record (gethash ,tag-or-sexp ,*brake-records*)))
-		     (unless record
-		       (error "No record found for breakpoing with tag ~a" tag-or-sexp))
-		     (let ((,tail (member (state ,record) (brake-points ,record))))
+		     (unless ,record
+		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
+		     (let* ((,tail (member (state ,record) (brake-points ,record)))
+			    (,subtail (member ,step ,tail)))
 		       ;; right after current
 		       (unwind-protect
-			    (when (eql (cdr ,tail) (member ,step ,tail))
+			    (when (eql (cdr ,tail) ,subtail)
 			      (break)
 			      (setf (state ,record) ,step))
 			 ;; reset state if user aborts from BREAK or after last break
-			 (unless (eql (state ,record) ,step)
+			 (unless (and (eql (state ,record) ,step)
+				      (print (cdr ,subtail)))
 			   (setf (state ,record) 0))))))
 		'(break))
 	    '(break))
