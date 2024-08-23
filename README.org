@@ -41,7 +41,7 @@ recompile your multi-threaded code with breakpoints while running it.
 
 * Definitions
 
-(brake /tag-or-sexp/ /step/ /sexp/)
+** (brake /tag-or-sexp/ /step/ /sexp/)
 
 Sets a breakpoint.
 
@@ -51,22 +51,16 @@ Example: ~(if (oddp x) (brake (branch-odd)) (branch-even))~
 
 Example: ~(brake :walk 4)~
 
-
-
-(brake-when /conditional/ /tag-or-sexp/ /step/ /sexp/)
+** (brake-when /conditional/ /tag-or-sexp/ /step/ /sexp/)
 
 Sets a conditional breakpoint.
 
+** (brake-enable /tag/)
 
-
-(brake-enable /tag/)
-
-(brake-disable /tag/)
+** (brake-disable /tag/)
 
 Enable or disable breakpoints of the specified tag.
 
-
-
-(reset-brake-points)
+**  (reset-brake-points)
 
 Clear all tagged breakpoints. Useful when you about to recompile the project.
