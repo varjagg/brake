@@ -18,7 +18,7 @@
 
 * Summary
 
-This project auguments standard Common Lisp BREAK facility with several conveniences.
+This project augments standard Common Lisp BREAK facility with several conveniences.
 
 - BRAKE in its simplest form with no arguments works as BREAK. However it can also wrap an s-expression,
   allowing for convenient breakpoints for instance in IF special operators.
@@ -32,3 +32,20 @@ This project auguments standard Common Lisp BREAK facility with several convenie
 
 Disclaimer: this is still an experimental project, subject to changes. As it is more complex than the simple
 BREAK there are almost certainly scenarios where BRAKE would work counter-intuitively or fail.
+
+* Multi-threading
+
+BRAKE is not thread-safe per se as it uses shared state. This is also intentional as there's hope to make it
+usable for debugging race conditions and other multi-threading issues. That said it's not recommended to
+recompile your multi-threaded code with breakpoints while running it.
+
+* Definitions
+
+(brake /tag-or-sexp/ /step/ /sexp/)
+
+Example: ~(brake)~
+Example: ~(if (oddp x) (brake (branch-odd)) (branch-even))~
+Example: ~(brake :walk 4)~
+
+
+(brake-if /conditional/ /tag-or-sexp/ /step/ /sexp/)
