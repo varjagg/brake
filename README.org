@@ -1,0 +1,34 @@
+#+startup: showall
+#+TITLE: Brarke: an extended BREAK facility for Common Lisp
+#+PROPERTY: header-args :results output
+#+OPTIONS: toc:nil
+#+INFOJS_OPT: view:showall toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper, 11pt]
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{common-lisp, fontsize=\scriptsize}
+#+LaTeX_HEADER: \usepackage[left=0.6in, right=0.6in]{geometry}
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \pagestyle{fancyplain}
+#+LATEX_HEADER: \lhead{}
+#+LATEX_HEADER: \rhead{}
+#+LATEX_HEADER: \lfoot{}
+#+LATEX_HEADER: \rfoot{}
+#+HTML_HEAD: <link rel="stylesheet" href="https://sandyuraz.com/styles/org.min.css">
+
+* Summary
+
+This project auguments standard Common Lisp BREAK facility with several conveniences.
+
+- BRAKE in its simplest form with no arguments works as BREAK. However it can also wrap an s-expression,
+  allowing for convenient breakpoints for instance in IF special operators.
+
+- BRAKE can also be sequenced with two arguments: TAG and STEP. A tag keyword groups a number of BRAKE points
+  across code sequenced by their STEP numbers. BRAKE points are activated only if they are either the first in
+  the sequence or if a preceding step had already been reached. This allows for somewhat more manageable
+  debugging of complex iterations, recursive functions and multi-threaded code.
+
+- BRAKE-WHEN is an extended from with conditional clause.
+
+Disclaimer: this is still an experimental project, subject to changes. As it is more complex than the simple
+BREAK there are almost certainly scenarios where BRAKE would work counter-intuitively or fail.
