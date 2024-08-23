@@ -31,7 +31,7 @@
 	(subtail (gensym "BRK")))
     (when (and tag-or-sexp (listp tag-or-sexp))
       (setf sexp tag-or-sexp))
-    `(let ((,result (progn ,sexp)))
+    `(let ((,result (multiple-value-list ,sexp)))
        ,(if tag-or-sexp
 	    (if (keywordp tag-or-sexp)
 		(progn
