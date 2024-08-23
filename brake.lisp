@@ -44,7 +44,7 @@
 			 ;; right after current
 			 (unwind-protect
 			      (when (eql (cdr ,tail) ,subtail)
-				(break)
+				(break "Breaking at tag ~s step ~d" ,tag-or-sexp ,step)
 				(setf (state ,record) ,step))
 			   ;; reset state if user aborts from BREAK or after last break
 			   (unless (and (eql (state ,record) ,step)
