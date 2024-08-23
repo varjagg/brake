@@ -53,7 +53,7 @@
 			     (setf (state ,record) -1)))))))
 		'(break))
 	    '(break))
-       ,result)))
+       (values-list ,result))))
 
 (defmacro brake-when (condition &optional tag-or-sexp step sexp)
   `(if ,condition
