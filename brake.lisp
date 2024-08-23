@@ -1,7 +1,7 @@
 (in-package #:brake)
 
 (defclass brake-record ()
-  ((state :initform 0
+  ((state :initform -1
 	  :accessor state
 	  :type integer)
    (enabled-p :initform t
@@ -24,6 +24,7 @@
     record))
 
 (defmacro brake (&optional tag-or-sexp step sexp)
+  (check-type step (or (satisfies null) (integer 0 *)) "An integer >= 0")
   (let ((result (gensym "BRK-RES"))
 	(record (gensym "BRK"))
 	(tail (gensym "BRK"))
@@ -49,7 +50,7 @@
 			   ;; reset state if user aborts from BREAK or after last break
 			   (unless (and (eql (state ,record) ,step)
 					(print (cdr ,subtail)))
-			     (setf (state ,record) 0)))))))
+			     (setf (state ,record) -1)))))))
 		'(break))
 	    '(break))
        ,result)))
