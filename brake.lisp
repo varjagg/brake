@@ -55,10 +55,10 @@
 	    '(break))
        ,result)))
 
-(defmacro brake-when (predicate &optional tag-or-sexp step sexp)
-  `(if (funcall ,predicate)
+(defmacro brake-when (condition &optional tag-or-sexp step sexp)
+  `(if ,condition
        (brake ,tag-or-sexp ,step ,sexp)
-       (if (and ,tag-or-sexp (listp mtag-or-sexp))
+       (if (and ,tag-or-sexp (listp ,tag-or-sexp))
 	   ,tag-or-sexp
 	   ,sexp)))
 
