@@ -44,7 +44,9 @@ recompile your multi-threaded code with breakpoints while running it.
 (brake /tag-or-sexp/ /step/ /sexp/)
 
 Example: ~(brake)~
+
 Example: ~(if (oddp x) (brake (branch-odd)) (branch-even))~
+
 Example: ~(brake :walk 4)~
 
 
