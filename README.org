@@ -18,6 +18,8 @@
 
 * Summary
 
+(NB: this project is still work in progress)
+
 This project augments standard Common Lisp BREAK facility with several conveniences.
 
 - BRAKE in its simplest form with no arguments works as BREAK. However it can also wrap an s-expression,
