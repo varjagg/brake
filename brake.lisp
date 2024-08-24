@@ -82,8 +82,4 @@
   (clrhash *brake-records*))
 
 (defun reset-brake-tag (tag)
-  (let ((record (gethash tag *brake-records*)))
-    (if record
-	(setf (brake-points record) nil
-	      (enabled-p record) nil)
-	(warn "Attempt to reset non-existing tag ~s" tag))))
+  (remhash tag *brake-records*))
