@@ -2,12 +2,20 @@
 
 (defclass brake-record ()
   ((state :initform -1
+	  :initarg :state
 	  :accessor state
 	  :type integer)
    (enabled-p :initform t
+	      :initarg :enabled-p
 	      :accessor enabled-p)
    (brake-points :accessor brake-points
+		 :initarg :brake-points
 		 :initform '())))
+
+(defmethod make-load-form ((record brake-record) &optional environment)
+  (declare (ignore environment))
+  `(make-instance 'brake-record :state ,(state record) :enabled-p ,(enabled-p record)
+		  :brake-points ,(brake-points record))))
 
 (defparameter *brake-records* (make-hash-table))
 
