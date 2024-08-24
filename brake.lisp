@@ -15,7 +15,7 @@
 (defmethod make-load-form ((record brake-record) &optional environment)
   (make-load-form-saving-slots record
 			       :slot-names '(state enabled-p brake-points)
-			       :environment environment)))
+			       :environment environment))
 
 (defparameter *brake-records* (make-hash-table))
 
@@ -35,6 +35,7 @@
   (check-type step (or (satisfies null) (integer 0 *)) "An integer >= 0")
   (let ((result (gensym "BRK-RES"))
 	(record (gensym "BRK"))
+	(prev-state (gensym "BRK"))
 	(tail (gensym "BRK"))
 	(subtail (gensym "BRK")))
     (when (and tag-or-sexp (listp tag-or-sexp))
@@ -48,16 +49,20 @@
 		     (unless ,record
 		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
 		     (when (enabled-p ,record)
-		       (let* ((,tail (member (state ,record) (brake-points ,record)))
+		       (let* ((,prev-state (state ,record))
+			      (,tail (member (state ,record) (brake-points ,record)))
 			      (,subtail (member ,step ,tail)))
 			 ;; right after current
 			 (unwind-protect
-			      (when (eql (cdr ,tail) ,subtail)
+			      (when (or (and (= (state ,record) -1)
+					     (= ,step (first (brake-points ,record))))
+					(and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
 				(break "Breaking at tag ~s step ~d" ,tag-or-sexp ,step)
 				(setf (state ,record) ,step))
 			   ;; reset state if user aborts from BREAK or after last break
-			   (unless (and (eql (state ,record) ,step)
-					(print (cdr ,subtail)))
+			   (unless (or (minusp ,prev-state)
+				       (and (eql (state ,record) ,step)
+					    (cdr ,subtail)))
 			     (setf (state ,record) -1)))))))
 		'(break))
 	    '(break))
