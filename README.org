@@ -64,3 +64,7 @@ Enable or disable breakpoints of the specified tag.
 **  (reset-brake-points)
 
 Clear all tagged breakpoints. Useful when you about to recompile the project.
+
+** (reset-brake-tag /tag/)
+
+Clear the steps for the tag and disable it.
