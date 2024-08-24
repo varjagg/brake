@@ -13,9 +13,9 @@
 		 :initform '())))
 
 (defmethod make-load-form ((record brake-record) &optional environment)
-  (declare (ignore environment))
-  `(make-instance 'brake-record :state ,(state record) :enabled-p ,(enabled-p record)
-		  :brake-points ,(brake-points record))))
+  (make-load-form-saving-slots record
+			       :slot-names '(state enabled-p brake-points)
+			       :environment environment)))
 
 (defparameter *brake-records* (make-hash-table))
 
