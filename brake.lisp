@@ -31,6 +31,9 @@
 		   #'<)))
     record))
 
+(defun get-record (tag)
+  (gethash tag *brake-records*))
+
 (defmacro brake (&optional tag-or-sexp step sexp)
   (check-type step (or (satisfies null) (integer 0 *)) "An integer >= 0")
   (let ((result (gensym "BRK-RES"))
@@ -45,7 +48,7 @@
 	    (if (keywordp tag-or-sexp)
 		(progn
 		  (add-brake-record tag-or-sexp step)
-		  `(let ((,record (gethash ,tag-or-sexp ,*brake-records*)))
+		  `(let ((,record (get-record ,tag-or-sexp)))
 		     (unless ,record
 		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
 		     (when (enabled-p ,record)
