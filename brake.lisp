@@ -35,7 +35,8 @@
        ,(if tag-or-sexp
 	    (if (keywordp tag-or-sexp)
 		(progn
-		  (add-brake-record tag-or-sexp step)
+		  (eval-when (:compile-toplevel :load-toplevel)
+		    (add-brake-record tag-or-sexp step))
 		  `(let ((,record (gethash ,tag-or-sexp ,*brake-records*)))
 		     (unless ,record
 		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
