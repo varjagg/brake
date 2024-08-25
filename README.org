@@ -18,8 +18,6 @@
 
 * Summary
 
-(NB: this project is still work in progress)
-
 This project augments standard Common Lisp BREAK facility with several conveniences.
 
 - BRAKE in its simplest form with no arguments works as BREAK. However it can also wrap an s-expression,
@@ -32,6 +30,8 @@ This project augments standard Common Lisp BREAK facility with several convenien
 
 - BRAKE-WHEN is an extended from with conditional clause.
 
+- MARKER has the semantics of tagged BRAKE, except it does not interrupt the execution.
+
 Disclaimer: this is still an experimental project, subject to changes. As it is more complex than the simple
 BREAK there are almost certainly scenarios where BRAKE would work counter-intuitively or fail.
 
@@ -43,7 +43,7 @@ recompile your multi-threaded code with breakpoints while running it.
 
 * Definitions
 
-** (brake /tag-or-sexp/ /step/ /sexp/)
+** (brake &optional /tag-or-sexp/ /step/ /sexp/)
 
 Sets a breakpoint.
 
@@ -53,9 +53,13 @@ Example: ~(if (oddp x) (brake (branch-odd)) (branch-even))~
 
 Example: ~(brake :walk 4)~
 
-** (brake-when /conditional/ /tag-or-sexp/ /step/ /sexp/)
+** (brake-when /conditional/ &optional /tag-or-sexp/ /step/ /sexp/)
 
 Sets a conditional breakpoint.
+
+** (marker /tag/ /step/ &optional /sexp/)
+
+Marks the step as reached in the control flow but does not interrupt execution.
 
 ** (brake-enable /tag/)
 
