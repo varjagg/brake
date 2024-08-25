@@ -50,7 +50,7 @@
 		  (add-brake-record tag-or-sexp step)
 		  `(let ((,record (get-record ,tag-or-sexp)))
 		     (unless ,record
-		       (error "No record found for breakpoing with tag ~a" ,tag-or-sexp))
+		       (error "No record found for breakpoint with tag ~a" ,tag-or-sexp))
 		     (when (enabled-p ,record)
 		       (let* ((,prev-state (state ,record))
 			      (,tail (member (state ,record) (brake-points ,record)))
@@ -81,6 +81,33 @@
 (defmacro break-when (&rest args)
   `(brake-when ,@args))
 
+(defmacro marker (tag step &optional sexp)
+  (check-type step (integer 0 *) "An integer >= 0")
+  (let ((result (gensym "BRK-RES"))
+	(record (gensym "BRK"))
+	(prev-state (gensym "BRK"))
+	(tail (gensym "BRK"))
+	(subtail (gensym "BRK")))
+    `(let ((,result (multiple-value-list ,sexp)))
+       ,(progn
+	  (add-brake-record tag step)
+	  `(let ((,record (get-record ,tag)))
+	     (unless ,record
+	       (error "No record found for marker with tag ~a" ,tag))
+	     (when (enabled-p ,record)
+	       (let* ((,prev-state (state ,record))
+		      (,tail (member (state ,record) (brake-points ,record)))
+		      (,subtail (member ,step ,tail)))
+		 ;; right after current
+		 (when (or (and (= (state ,record) -1)
+				(= ,step (first (brake-points ,record))))
+			   (and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
+		   (setf (state ,record) ,step))
+		 (unless (or (minusp ,prev-state)
+			     (cdr ,subtail))
+		   (setf (state ,record) -1))))))
+       (values-list ,result))))
+
 (defun brake-disable (tag)
   (let ((record (gethash tag *brake-records*)))
     (if record
@@ -98,3 +125,11 @@
 
 (defun reset-brake-tag (tag)
   (remhash tag *brake-records*))
+
+(defun a ()
+  (brake :x 2))
+
+(defun b ()
+  (a)
+  (brake :x 1)
+  (a))
