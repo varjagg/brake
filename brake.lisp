@@ -125,11 +125,3 @@
 
 (defun reset-brake-tag (tag)
   (remhash tag *brake-records*))
-
-(defun a ()
-  (brake :x 2))
-
-(defun b ()
-  (a)
-  (brake :x 1)
-  (a))
