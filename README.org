@@ -69,7 +69,7 @@ Enable or disable breakpoints of the specified tag.
 
 **  (reset-brake-points)
 
-Clear all tagged breakpoints. Useful when you about to recompile the project.
+Clear all tagged breakpoints. Useful when you remove breakpoints in the code, followed by recompilation.
 
 ** (reset-brake-tag /tag/)
 
