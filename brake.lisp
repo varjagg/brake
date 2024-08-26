@@ -85,7 +85,7 @@
 	  (add-brake-record tag step)
 	  `(let ((,record (get-record ,tag)))
 	     (unless ,record
-	       (error "No record found for marker with tag ~a" ,tag))
+	       (error "No record found for mark with tag ~a" ,tag))
 	     (when (enabled-p ,record)
 	       (let* ((,prev-state (state ,record))
 		      (,tail (member (state ,record) (brake-points ,record)))

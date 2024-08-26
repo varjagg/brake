@@ -30,7 +30,7 @@ This project augments standard Common Lisp BREAK facility with several convenien
 
 - BRAKE-WHEN is an extended from with conditional clause.
 
-- MARKER has the semantics of tagged BRAKE, except it does not interrupt the execution.
+- MARK has the semantics of tagged BRAKE, except it does not interrupt the execution.
 
 Disclaimer: this is still an experimental project, subject to changes. As it is more complex than the simple
 BREAK there are almost certainly scenarios where BRAKE would work counter-intuitively or fail.
@@ -57,7 +57,7 @@ Example: ~(brake :walk 4)~
 
 Sets a conditional breakpoint.
 
-** (marker /tag/ /step/ &optional /sexp/)
+** (mark /tag/ /step/ &optional /sexp/)
 
 Marks the step as reached in the control flow but does not interrupt execution.
 
