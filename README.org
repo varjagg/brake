@@ -1,5 +1,5 @@
 #+startup: showall
-#+TITLE: Brarke: an extended BREAK facility for Common Lisp
+#+TITLE: Brake: an extended BREAK facility for Common Lisp
 #+PROPERTY: header-args :results output
 #+OPTIONS: toc:nil
 #+INFOJS_OPT: view:showall toc:nil
