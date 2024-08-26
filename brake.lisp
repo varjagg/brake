@@ -73,7 +73,7 @@
 (defmacro break-when (&rest args)
   `(brake-when ,@args))
 
-(defmacro marker (tag step &optional sexp)
+(defmacro mark (tag step &optional sexp)
   (check-type step (integer 0 *) "An integer >= 0")
   (let ((result (gensym "BRK-RES"))
 	(record (gensym "BRK"))
@@ -110,6 +110,13 @@
   (let ((record (gethash tag *brake-records*)))
     (if record
 	(setf (enabled-p record) t)
+	(warn "No record of breakpoints with tag ~a" tag))))
+
+(defun brake-reset (tag)
+  (let ((record (gethash tag *brake-records*)))
+    (if record
+	(setf (enabled-p record) t
+	      (state record) -1)
 	(warn "No record of breakpoints with tag ~a" tag))))
 
 (defun reset-brake-points ()
