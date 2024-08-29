@@ -51,6 +51,7 @@
 			 (unwind-protect
 			      (when (or (and (= (state ,record) -1)
 					     (= ,step (first (brake-points ,record))))
+					(= ,prev-state ,step)
 					(and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
 				(break "Breaking at tag ~s step ~d" ,tag-or-sexp ,step)
 				(setf (state ,record) ,step))
@@ -93,6 +94,7 @@
 		 ;; right after current
 		 (when (or (and (= (state ,record) -1)
 				(= ,step (first (brake-points ,record))))
+			   (= ,prev-state ,step)
 			   (and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
 		   (setf (state ,record) ,step))
 		 (unless (or (minusp ,prev-state)
