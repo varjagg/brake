@@ -140,8 +140,13 @@
     (operate-brake tag (tracing-p t)))
   t)
 
-(defun brake-untrace (tag &rest tags)
-  (push tag tagsP)
+(defun brake-untrace (&optional tag &rest tags)
+  (if tag
+      (push tag tags)
+      (maphash #'(lambda (k v)
+		   (declare (ignore v))
+		   (push k tags))
+	       *brake-records*))
   (dolist (tag tags)
     (check-type tag keyword "A keyword"))
   (dolist (tag tags)
