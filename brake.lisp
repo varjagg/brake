@@ -6,6 +6,8 @@
 	  :type integer)
    (enabled-p :initform t
 	      :accessor enabled-p)
+   (tracing-p :initform nil
+	      :accessor tracing-p)
    (brake-points :accessor brake-points
 		 :initform '())))
 
@@ -53,6 +55,11 @@
 					     (= ,step (first (brake-points ,record))))
 					(= ,prev-state ,step)
 					(and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
+				(when (tracing-p ,record)
+				  (format t "~&~vaTag ~s/~d ~:[~;values ~s~]"
+					  (position ,step (brake-points ,record))
+					  #\Space
+					  ,tag-or-sexp ,step (car ,result) ,result))
 				(break "Breaking at tag ~s step ~d" ,tag-or-sexp ,step)
 				(setf (state ,record) ,step))
 			   ;; reset state if user aborts from BREAK or after last break
@@ -96,30 +103,49 @@
 				(= ,step (first (brake-points ,record))))
 			   (= ,prev-state ,step)
 			   (and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
+		   (when (tracing-p ,record)
+		     (format t "~&~vaTag ~s/~d ~:[~;values ~s~]"
+			     (position ,step (brake-points ,record))
+			     #\Space
+			     ,tag ,step (car ,result) ,result))
 		   (setf (state ,record) ,step))
 		 (unless (or (minusp ,prev-state)
 			     (cdr ,subtail))
 		   (setf (state ,record) -1))))))
        (values-list ,result))))
 
+(defmacro operate-brake (tag &rest parameter-pairs)
+  (let* ((record (gensym))
+	 (body (loop for (slot value) in parameter-pairs
+		     appending (list (list slot record) value))))
+    `(let ((,record (gethash ,tag *brake-records*)))
+       (if ,record
+	   (setf ,@body)
+	   (warn "No record of breakpoints with tag ~a" ,tag)))))
+
 (defun brake-disable (tag)
-  (let ((record (gethash tag *brake-records*)))
-    (if record
-	(setf (enabled-p record) nil)
-	(warn "No record of breakpoints with tag ~a" tag))))
+  (operate-brake tag (enabled-p nil)))
 
 (defun brake-enable (tag)
-  (let ((record (gethash tag *brake-records*)))
-    (if record
-	(setf (enabled-p record) t)
-	(warn "No record of breakpoints with tag ~a" tag))))
+  (operate-brake tag (enabled-p t)))
 
 (defun brake-reset (tag)
-  (let ((record (gethash tag *brake-records*)))
-    (if record
-	(setf (enabled-p record) t
-	      (state record) -1)
-	(warn "No record of breakpoints with tag ~a" tag))))
+  (operate-brake tag (enabled-p t) (tracing-p nil) (state -1)))
+
+(defun brake-trace (tag &rest tags)
+  (push tag tags)
+  (dolist (tag tags)
+    (check-type tag keyword "A keyword"))
+  (dolist (tag tags)
+    (operate-brake tag (tracing-p t)))
+  t)
+
+(defun brake-untrace (tag &rest tags)
+  (push tag tagsP)
+  (dolist (tag tags)
+    (check-type tag keyword "A keyword"))
+  (dolist (tag tags)
+    (operate-brake tag (tracing-p nil))))
 
 (defun clear-brake-points ()
   (clrhash *brake-records*))
@@ -129,6 +155,6 @@
 
 (defun report-brakes ()
   (maphash #'(lambda (tag record)
-	       (format t "Tag ~s is ~:[DISABLED~;ENABLED~] with ~d defined step~:p, current state is ~:[~d~;initial~]~%"
-		       tag (enabled-p record) (length (brake-points record)) (minusp (state record)) (state record)))
+	       (format t "~&Tag ~s is ~:[DISABLED~;ENABLED~]~:[~;, traced,~] with ~d defined step~:p, current state is ~:[~d~;initial~]~%"
+		       tag (enabled-p record) (tracing-p record) (length (brake-points record)) (minusp (state record)) (state record)))
 	   *brake-records*))
