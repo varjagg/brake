@@ -121,10 +121,10 @@
 	      (state record) -1)
 	(warn "No record of breakpoints with tag ~a" tag))))
 
-(defun reset-brake-points ()
+(defun clear-brake-points ()
   (clrhash *brake-records*))
 
-(defun reset-brake-tag (tag)
+(defun clear-brake-tag (tag)
   (remhash tag *brake-records*))
 
 (defun report-brakes ()
