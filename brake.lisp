@@ -129,6 +129,6 @@
 
 (defun report-brakes ()
   (maphash #'(lambda (tag record)
-	       (format t "Tag ~s with ~d defined step~:p, current state is ~:[~d~;initial~]: ~:[enabled~;disabled~]~%"
-		       tag (length (brake-points record)) (minusp (state record)) (state record) (enabled-p record)))
+	       (format t "Tag ~s is ~:[DISABLED~;ENABLED~] with ~d defined step~:p, current state is ~:[~d~;initial~]~%"
+		       tag (enabled-p record) (length (brake-points record)) (minusp (state record)) (state record)))
 	   *brake-records*))
