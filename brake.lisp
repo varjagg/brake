@@ -126,3 +126,12 @@
 
 (defun reset-brake-tag (tag)
   (remhash tag *brake-records*))
+
+(defun report-brakes ()
+  (maphash #'(lambda (tag record)
+	       (format t "Tag ~s with ~d defined step~:p, current state is ~a: ~:[enabled~;disabled~]~%"
+		       tag (length (brake-points record)) (if (minusp (state record))
+							      "initial"
+							      (state record))
+		       (enabled-p record)))
+	   *brake-records*))
