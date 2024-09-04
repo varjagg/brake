@@ -32,6 +32,8 @@ This project augments standard Common Lisp BREAK facility with several convenien
 
 - MARK has the semantics of tagged BRAKE, except it does not interrupt the execution.
 
+When tagged, both BRAKE(-WHEN) and MARK allow to enable tracing.
+
 Disclaimer: this is still an experimental project, subject to changes. As it is more complex than the simple
 BREAK there are almost certainly scenarios where BRAKE would work counter-intuitively or fail.
 
@@ -67,10 +69,22 @@ Marks the step as reached in the control flow but does not interrupt execution.
 
 Enable or disable breakpoints of the specified tag.
 
-**  (reset-brake-points)
+**  (clear-brake-points)
 
 Clear all tagged breakpoints. Useful when you remove breakpoints in the code, followed by recompilation.
 
-** (reset-brake-tag /tag/)
+** (clear-brake-tag /tag/)
 
 Clear the steps for the tag and disable it.
+
+** (report-brakes)
+
+Print the summary of all tagged brakes state.
+
+** (brake-trace /tag/ &rest /tags/)
+
+Print a trace of brakes or marks reached into ~*debug-io*~.
+
+** (brake-untrace &optional /tag/ &rest /tags/)
+
+Untrace either specific tags or all tags if no argument is supplied.
