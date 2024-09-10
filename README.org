@@ -63,11 +63,11 @@ Sets a conditional breakpoint.
 
 Marks the step as reached in the control flow but does not interrupt execution.
 
-** (brake-enable /tag/)
+** (brake-enable &optional /tag/ &rest /tags/)
 
-** (brake-disable /tag/)
+** (brake-disable &optional /tag/ &rest /tags/)
 
-Enable or disable breakpoints of the specified tag.
+Enable or disable breakpoints of specified tags. Acts on all tags if none is supplied.
 
 **  (clear-brake-points)
 
