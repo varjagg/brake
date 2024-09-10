@@ -130,11 +130,21 @@
      (dolist (tag ,tags)
        (operate-brake tag ,@operation-expressions))))
 
-(defun brake-disable (tag &rest tags)
-  (operate-brakes (cons tag tags) (enabled-p nil)))
+(defun brake-disable (&rest tags)
+  (unless tags
+    (maphash #'(lambda (k v)
+		 (declare (ignore v))
+		 (push k tags))
+	     *brake-records*))
+  (operate-brakes tags (enabled-p nil)))
 
-(defun brake-enable (tag &rest tags)
-  (operate-brakes (cons tag tags) (enabled-p t)))
+(defun brake-enable (&rest tags)
+  (unless tags
+    (maphash #'(lambda (k v)
+		 (declare (ignore v))
+		 (push k tags))
+	     *brake-records*))
+  (operate-brakes tags (enabled-p t)))
 
 (defun brake-reset (tag)
   (operate-brake tag (enabled-p t) (tracing-p nil) (state -1)))
@@ -143,13 +153,12 @@
   (operate-brakes (cons tag tags) (tracing-p t))
   t)
 
-(defun brake-untrace (&optional tag &rest tags)
-  (if tag
-      (push tag tags)
-      (maphash #'(lambda (k v)
-		   (declare (ignore v))
-		   (push k tags))
-	       *brake-records*))
+(defun brake-untrace (&rest tags)
+  (unless tags
+    (maphash #'(lambda (k v)
+		 (declare (ignore v))
+		 (push k tags))
+	     *brake-records*))
   (operate-brakes tags (tracing-p nil)))
 
 (defun clear-brake-points ()

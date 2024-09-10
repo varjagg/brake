@@ -63,9 +63,9 @@ Sets a conditional breakpoint.
 
 Marks the step as reached in the control flow but does not interrupt execution.
 
-** (brake-enable &optional /tag/ &rest /tags/)
+** (brake-enable &rest /tags/)
 
-** (brake-disable &optional /tag/ &rest /tags/)
+** (brake-disable &rest /tags/)
 
 Enable or disable breakpoints of specified tags. Acts on all tags if none is supplied.
 
@@ -85,6 +85,6 @@ Print the summary of all tagged brakes state.
 
 Print a trace of brakes or marks reached into ~*debug-io*~.
 
-** (brake-untrace &optional /tag/ &rest /tags/)
+** (brake-untrace &rest /tags/)
 
 Untrace either specific tags or all tags if no argument is supplied.
