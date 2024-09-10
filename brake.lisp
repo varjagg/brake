@@ -123,21 +123,24 @@
 	   (setf ,@body)
 	   (warn "No record of breakpoints with tag ~a" ,tag)))))
 
-(defun brake-disable (tag)
-  (operate-brake tag (enabled-p nil)))
+(defmacro operate-brakes (tags &rest operation-expressions)
+  `(progn
+     (dolist (tag ,tags)
+       (check-type tag keyword "A keyword"))
+     (dolist (tag ,tags)
+       (operate-brake tag ,@operation-expressions))))
 
-(defun brake-enable (tag)
-  (operate-brake tag (enabled-p t)))
+(defun brake-disable (tag &rest tags)
+  (operate-brakes (cons tag tags) (enabled-p nil)))
+
+(defun brake-enable (tag &rest tags)
+  (operate-brakes (cons tag tags) (enabled-p t)))
 
 (defun brake-reset (tag)
   (operate-brake tag (enabled-p t) (tracing-p nil) (state -1)))
 
 (defun brake-trace (tag &rest tags)
-  (push tag tags)
-  (dolist (tag tags)
-    (check-type tag keyword "A keyword"))
-  (dolist (tag tags)
-    (operate-brake tag (tracing-p t)))
+  (operate-brakes (cons tag tags) (tracing-p t))
   t)
 
 (defun brake-untrace (&optional tag &rest tags)
@@ -147,10 +150,7 @@
 		   (declare (ignore v))
 		   (push k tags))
 	       *brake-records*))
-  (dolist (tag tags)
-    (check-type tag keyword "A keyword"))
-  (dolist (tag tags)
-    (operate-brake tag (tracing-p nil))))
+  (operate-brakes tags (tracing-p nil)))
 
 (defun clear-brake-points ()
   (clrhash *brake-records*))
