@@ -114,6 +114,13 @@
 		   (setf (state ,record) -1))))))
        (values-list ,result))))
 
+(defmacro mark-when (condition &optional tag-or-sexp step sexp)
+  `(if ,condition
+       (mark ,tag-or-sexp ,step ,sexp)
+       (if (and ,tag-or-sexp (listp ,tag-or-sexp))
+	   ,tag-or-sexp
+	   ,sexp)))
+
 (defmacro operate-brake (tag &rest parameter-pairs)
   (let* ((record (gensym))
 	 (body (loop for (slot value) in parameter-pairs
