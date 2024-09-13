@@ -13,7 +13,7 @@
 
 (defparameter *brake-records* (make-hash-table))
 
-(defmethod add-brake-record (tag step)
+(defun add-brake-record (tag step)
   (check-type step (integer 0 *) "A positive integer")
   (let ((record (or (gethash tag *brake-records*)
 		    (setf (gethash tag *brake-records*)
