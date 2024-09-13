@@ -39,9 +39,8 @@ BREAK there are almost certainly scenarios where BRAKE would work counter-intuit
 
 * Multi-threading
 
-BRAKE is not thread-safe per se as it uses shared state. This is also intentional as there's hope to make it
-usable for debugging race conditions and other multi-threading issues. That said it's not recommended to
-recompile your multi-threaded code with breakpoints while running it.
+BRAKE is not thread-safe per se as it uses shared state. However there's hope to make it usable for debugging
+race conditions and other multi-threading issues.
 
 * Definitions
 
@@ -62,6 +61,10 @@ Sets a conditional breakpoint.
 ** (mark /tag/ /step/ &optional /sexp/)
 
 Marks the step as reached in the control flow but does not interrupt execution.
+
+** (mark-when /conditional/ &optional /tag-or-sexp/ /step/ /sexp/)
+
+Sets a conditional mark.
 
 ** (brake-enable &rest /tags/)
 
