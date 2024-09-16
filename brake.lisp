@@ -74,9 +74,9 @@
 (defmacro brake-when (condition &optional tag-or-sexp step sexp)
   `(if ,condition
        (brake ,tag-or-sexp ,step ,sexp)
-       (if (and ,tag-or-sexp (listp ,tag-or-sexp))
-	   ,tag-or-sexp
-	   ,sexp)))
+       ,(if (and tag-or-sexp (listp tag-or-sexp))
+	   tag-or-sexp
+	   sexp)))
 
 (defmacro break-when (&rest args)
   `(brake-when ,@args))
