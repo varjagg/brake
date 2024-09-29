@@ -86,7 +86,7 @@ Print the summary of all tagged brakes state.
 
 ** (brake-trace /tag/ &rest /tags/)
 
-Print a trace of brakes or marks reached into ~*debug-io*~.
+Print a trace of brakes or marks reached into ~*trace-output*~.
 
 ** (brake-untrace &rest /tags/)
 

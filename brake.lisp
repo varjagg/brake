@@ -56,7 +56,7 @@
 					(= ,prev-state ,step)
 					(and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
 				(when (tracing-p ,record)
-				  (format t "~&~vaTag ~s/~d ~:[~;values ~s~]"
+				  (format *trace-output* "~&~vaTag ~s/~d ~:[~;values ~s~]"
 					  (position ,step (brake-points ,record))
 					  #\Space
 					  ,tag-or-sexp ,step (car ,result) ,result))
@@ -104,7 +104,7 @@
 			   (= ,prev-state ,step)
 			   (and (cdr ,tail) (eql (cdr ,tail) ,subtail)))
 		   (when (tracing-p ,record)
-		     (format t "~&~vaTag ~s/~d ~:[~;values ~s~]"
+		     (format *trace-output* "~&~vaTag ~s/~d ~:[~;values ~s~]"
 			     (position ,step (brake-points ,record))
 			     #\Space
 			     ,tag ,step (car ,result) ,result))
