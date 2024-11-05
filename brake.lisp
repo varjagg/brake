@@ -72,7 +72,10 @@
        (values-list ,result))))
 
 (defmacro brake-when (condition &optional tag-or-sexp step sexp)
-  `(if ,condition
+  `(if (and (if (keywordp ,tag-or-sexp)
+			   (enabled-p (get-record ,tag-or-sexp))
+			   t)
+	    ,condition)
        (brake ,tag-or-sexp ,step ,sexp)
        ,(if (and tag-or-sexp (listp tag-or-sexp))
 	   tag-or-sexp
@@ -115,7 +118,10 @@
        (values-list ,result))))
 
 (defmacro mark-when (condition &optional tag-or-sexp step sexp)
-  `(if ,condition
+  `(if (and (if (keywordp ,tag-or-sexp)
+		(enabled-p (get-record ,tag-or-sexp))
+		t)
+	    ,condition)
        (mark ,tag-or-sexp ,step ,sexp)
        ,(if (and tag-or-sexp (listp tag-or-sexp))
 	    tag-or-sexp
